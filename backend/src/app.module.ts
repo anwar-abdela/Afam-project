@@ -23,7 +23,7 @@ import { CategoriesModule } from './categories/categories.module';
                 password: config.get('DB_PASSWORD'),
                 database: config.get('DB_NAME'),
                 autoLoadEntities: true,
-                synchronize: true,
+                synchronize: false,
                 logging: config.get('NODE_ENV') === 'development',
                 ssl: config.get('NODE_ENV') === 'production' ? { rejectUnauthorized: false } : false,
             }),
