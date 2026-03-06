@@ -1,0 +1,28 @@
+                                Table "public.products"
+     Column     |           Type           | Collation | Nullable |      Default       
+----------------+--------------------------+-----------+----------+--------------------
+ id             | uuid                     |           | not null | uuid_generate_v4()
+ name           | character varying(200)   |           | not null | 
+ sku            | character varying(100)   |           | not null | 
+ category       | character varying(100)   |           |          | 
+ quantity       | integer                  |           | not null | 0
+ purchase_price | numeric(12,2)            |           | not null | 
+ selling_price  | numeric(12,2)            |           | not null | 
+ is_archived    | boolean                  |           | not null | false
+ created_at     | timestamp with time zone |           | not null | now()
+ updated_at     | timestamp with time zone |           | not null | now()
+Indexes:
+    "products_pkey" PRIMARY KEY, btree (id)
+    "idx_products_category" btree (category)
+    "idx_products_is_archived" btree (is_archived)
+    "idx_products_sku" btree (sku)
+    "products_sku_key" UNIQUE CONSTRAINT, btree (sku)
+Check constraints:
+    "products_purchase_price_check" CHECK (purchase_price >= 0::numeric)
+    "products_quantity_check" CHECK (quantity >= 0)
+    "products_selling_price_check" CHECK (selling_price >= 0::numeric)
+Referenced by:
+    TABLE "sales" CONSTRAINT "sales_product_id_fkey" FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE RESTRICT
+Triggers:
+    trg_products_updated_at BEFORE UPDATE ON products FOR EACH ROW EXECUTE FUNCTION update_updated_at_column()
+

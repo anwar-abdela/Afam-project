@@ -1,0 +1,15 @@
+  column_name   |        data_type         
+----------------+--------------------------
+ id             | uuid
+ name           | character varying
+ sku            | character varying
+ category       | character varying
+ quantity       | integer
+ purchase_price | numeric
+ selling_price  | numeric
+ is_archived    | boolean
+ created_at     | timestamp with time zone
+ updated_at     | timestamp with time zone
+ category_id    | uuid
+(11 rows)
+

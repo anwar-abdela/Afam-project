@@ -1,0 +1,1 @@
+psql:database/drop_old_category_column.sql:13: NOTICE:  Dropped old category column

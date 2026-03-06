@@ -1,0 +1,7 @@
+CREATE TABLE
+DO
+              status               
+-----------------------------------
+ Migration completed successfully!
+(1 row)
+
