@@ -6,8 +6,8 @@ export declare class ProductsService {
     constructor(repo: Repository<Product>);
     findAll(includeArchived?: boolean): Promise<Product[]>;
     findOne(id: string): Promise<Product>;
-    create(dto: CreateProductDto): Promise<Product[]>;
-    update(id: string, dto: UpdateProductDto): Promise<Product>;
-    archive(id: string): Promise<Product>;
+    create(dto: CreateProductDto, owner?: any): Promise<Product[]>;
+    update(id: string, dto: UpdateProductDto, currentUser?: any): Promise<Product>;
+    archive(id: string, currentUser?: any): Promise<Product>;
     getLowStock(threshold?: number): Promise<Product[]>;
 }

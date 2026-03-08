@@ -66,7 +66,7 @@ export default function Sales() {
                                     required
                                     value={formData.productId}
                                     onChange={e => setFormData({ ...formData, productId: e.target.value })}
-                                    className="w-full bg-gray-50 border border-transparent rounded-2xl px-4 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all font-semibold appearance-none cursor-pointer"
+                                    className="w-full bg-gray-50 border border-transparent rounded-2xl px-4 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-all font-semibold appearance-none cursor-pointer"
                                 >
                                     <option value="">Choose a product...</option>
                                     {products.map(p => (
@@ -75,7 +75,7 @@ export default function Sales() {
                                         </option>
                                     ))}
                                 </select>
-                                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-focus-within:text-indigo-500 transition-colors">
+                                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-focus-within:text-primary-500 transition-colors">
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
                                 </div>
                             </div>
@@ -95,7 +95,7 @@ export default function Sales() {
                                 required
                                 value={formData.quantity}
                                 onChange={e => setFormData({ ...formData, quantity: Number(e.target.value) })}
-                                className="w-full bg-gray-50 border border-transparent rounded-2xl px-4 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all font-black text-lg"
+                                className="w-full bg-gray-50 border border-transparent rounded-2xl px-4 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-all font-black text-lg"
                                 placeholder="0"
                             />
                         </div>
@@ -104,7 +104,7 @@ export default function Sales() {
                             <button
                                 type="submit"
                                 disabled={submitting}
-                                className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-bold rounded-2xl py-4 transition-all shadow-xl shadow-indigo-100 flex items-center justify-center gap-2 active:scale-95"
+                                className="w-full bg-accent hover:bg-accent-hover disabled:opacity-50 text-white font-bold rounded-2xl py-4 transition-all shadow-xl shadow-orange-100 flex items-center justify-center gap-2 active:scale-95"
                             >
                                 {submitting ? (
                                     <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
@@ -129,7 +129,7 @@ export default function Sales() {
                             <p className="text-sm text-gray-400 font-medium">Monitoring real-time sales performance</p>
                         </div>
                         <div className="bg-white px-4 py-2 rounded-xl text-xs font-bold text-gray-500 border border-gray-100 shadow-sm flex items-center gap-2">
-                            <span className="w-2 h-2 rounded-full bg-indigo-500"></span>
+                            <span className="w-2 h-2 rounded-full bg-primary-500"></span>
                             Live Feed
                         </div>
                     </div>
@@ -148,7 +148,7 @@ export default function Sales() {
                                 {loading ? (
                                     <tr><td colSpan="4" className="px-8 py-20 text-center">
                                         <div className="flex flex-col items-center gap-3">
-                                            <div className="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+                                            <div className="w-8 h-8 border-4 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
                                             <p className="text-sm text-gray-400 font-medium">Fetching history...</p>
                                         </div>
                                     </td></tr>
@@ -161,13 +161,13 @@ export default function Sales() {
                                     </td></tr>
                                 ) : (
                                     sales.slice(0, 15).map((sale) => (
-                                        <tr key={sale.id} className="hover:bg-indigo-50/30 transition-colors group">
+                                        <tr key={sale.id} className="hover:bg-blue-50/30 transition-colors group">
                                             <td className="px-8 py-5 whitespace-nowrap">
                                                 <p className="text-xs font-bold text-gray-400 group-hover:text-gray-600 transition-colors">{new Date(sale.saleDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                                                 <p className="text-[10px] font-medium text-gray-300 italic group-hover:text-gray-400 transition-colors">{new Date(sale.saleDate).toLocaleDateString()}</p>
                                             </td>
                                             <td className="px-8 py-5 whitespace-nowrap">
-                                                <p className="text-sm font-black text-gray-900 group-hover:text-indigo-700 transition-colors">{sale.product?.name || 'Archived Item'}</p>
+                                                <p className="text-sm font-black text-gray-900 group-hover:text-primary-500 transition-colors">{sale.product?.name || 'Archived Item'}</p>
                                                 <p className="text-[10px] text-gray-400 font-mono tracking-tighter uppercase">{sale.product?.sku || 'N/A'}</p>
                                             </td>
                                             <td className="px-8 py-5 whitespace-nowrap">
@@ -177,7 +177,7 @@ export default function Sales() {
                                                 </div>
                                             </td>
                                             <td className="px-8 py-5 whitespace-nowrap text-right">
-                                                <p className="text-sm font-black text-indigo-600">${Number(sale.totalPrice).toFixed(2)}</p>
+                                                <p className="text-sm font-black text-primary-500">${Number(sale.totalPrice).toFixed(2)}</p>
                                                 <p className="text-[10px] font-bold text-emerald-500 opacity-75">+${Number(sale.profit).toFixed(2)} net profit</p>
                                             </td>
                                         </tr>
@@ -188,7 +188,7 @@ export default function Sales() {
                     </div>
                     {sales.length > 15 && (
                         <div className="p-4 bg-gray-50/50 text-center">
-                            <button className="text-[11px] font-bold text-gray-400 uppercase tracking-widest hover:text-indigo-600 transition-colors">Load more activity</button>
+                            <button className="text-[11px] font-bold text-gray-400 uppercase tracking-widest hover:text-primary-500 transition-colors">Load more activity</button>
                         </div>
                     )}
                 </div>

@@ -3,6 +3,7 @@ import {
 } from 'typeorm';
 import { Sale } from '../sales/sale.entity';
 import { Category } from '../categories/category.entity';
+import { User } from '../users/user.entity';
 
 @Entity('products')
 export class Product {
@@ -36,6 +37,10 @@ export class Product {
 
     @Column({ name: 'updated_at', type: 'timestamptz', default: () => 'NOW()' })
     updatedAt: Date;
+
+    @ManyToOne(() => User, { nullable: true, onDelete: 'SET NULL' })
+    @JoinColumn({ name: 'owner_id' })
+    owner: User;
 
     @OneToMany(() => Sale, (sale) => sale.product)
     sales: Sale[];

@@ -25,7 +25,7 @@ let ProductsService = class ProductsService {
         return this.repo.find({
             where: includeArchived ? {} : { isArchived: false },
             order: { createdAt: 'DESC' },
-            relations: ['category']
+            relations: ['category', 'owner']
         });
     }
     async findOne(id) {
@@ -34,7 +34,7 @@ let ProductsService = class ProductsService {
             throw new common_1.NotFoundException(`Product ${id} not found`);
         return product;
     }
-    async create(dto) {
+    async create(dto, owner) {
         const existing = await this.repo.findOne({ where: { sku: dto.sku } });
         if (existing)
             throw new common_1.BadRequestException('SKU already exists');
@@ -43,11 +43,21 @@ let ProductsService = class ProductsService {
             productData.category = dto.categoryId ? { id: dto.categoryId } : null;
             delete productData.categoryId;
         }
+        if (owner) {
+            productData.owner = { id: owner.id };
+        }
         const product = this.repo.create(productData);
         return this.repo.save(product);
     }
-    async update(id, dto) {
-        const product = await this.findOne(id);
+    async update(id, dto, currentUser) {
+        const product = await this.repo.findOne({ where: { id }, relations: ['owner'] });
+        if (!product)
+            throw new common_1.NotFoundException(`Product ${id} not found`);
+        const isAdmin = currentUser?.role === 'admin';
+        const isOwner = product.owner?.id === currentUser?.id;
+        if (!isAdmin && !isOwner) {
+            throw new common_1.BadRequestException('Unauthorized: You do not own this product');
+        }
         let updateData = { ...dto };
         if (dto.categoryId !== undefined) {
             updateData.category = dto.categoryId ? { id: dto.categoryId } : null;
@@ -56,8 +66,15 @@ let ProductsService = class ProductsService {
         Object.assign(product, updateData);
         return this.repo.save(product);
     }
-    async archive(id) {
-        const product = await this.findOne(id);
+    async archive(id, currentUser) {
+        const product = await this.repo.findOne({ where: { id }, relations: ['owner'] });
+        if (!product)
+            throw new common_1.NotFoundException(`Product ${id} not found`);
+        const isAdmin = currentUser?.role === 'admin';
+        const isOwner = product.owner?.id === currentUser?.id;
+        if (!isAdmin && !isOwner) {
+            throw new common_1.BadRequestException('Unauthorized: You do not own this product');
+        }
         product.isArchived = true;
         return this.repo.save(product);
     }

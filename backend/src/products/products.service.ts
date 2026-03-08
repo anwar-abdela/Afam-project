@@ -16,7 +16,7 @@ export class ProductsService {
         return this.repo.find({
             where: includeArchived ? {} : { isArchived: false },
             order: { createdAt: 'DESC' },
-            relations: ['category']
+            relations: ['category', 'owner']
         });
     }
 
@@ -26,7 +26,7 @@ export class ProductsService {
         return product;
     }
 
-    async create(dto: CreateProductDto) {
+    async create(dto: CreateProductDto, owner?: any) {
         const existing = await this.repo.findOne({ where: { sku: dto.sku } });
         if (existing) throw new BadRequestException('SKU already exists');
 
@@ -36,12 +36,24 @@ export class ProductsService {
             delete productData.categoryId;
         }
 
+        if (owner) {
+            productData.owner = { id: owner.id };
+        }
+
         const product = this.repo.create(productData);
         return this.repo.save(product);
     }
 
-    async update(id: string, dto: UpdateProductDto) {
-        const product = await this.findOne(id);
+    async update(id: string, dto: UpdateProductDto, currentUser?: any) {
+        const product = await this.repo.findOne({ where: { id }, relations: ['owner'] });
+        if (!product) throw new NotFoundException(`Product ${id} not found`);
+
+        const isAdmin = currentUser?.role === 'admin';
+        const isOwner = product.owner?.id === currentUser?.id;
+
+        if (!isAdmin && !isOwner) {
+            throw new BadRequestException('Unauthorized: You do not own this product');
+        }
 
         let updateData: any = { ...dto };
         if (dto.categoryId !== undefined) {
@@ -53,8 +65,17 @@ export class ProductsService {
         return this.repo.save(product);
     }
 
-    async archive(id: string) {
-        const product = await this.findOne(id);
+    async archive(id: string, currentUser?: any) {
+        const product = await this.repo.findOne({ where: { id }, relations: ['owner'] });
+        if (!product) throw new NotFoundException(`Product ${id} not found`);
+
+        const isAdmin = currentUser?.role === 'admin';
+        const isOwner = product.owner?.id === currentUser?.id;
+
+        if (!isAdmin && !isOwner) {
+            throw new BadRequestException('Unauthorized: You do not own this product');
+        }
+
         product.isArchived = true;
         return this.repo.save(product);
     }

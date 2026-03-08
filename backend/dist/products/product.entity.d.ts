@@ -1,5 +1,6 @@
 import { Sale } from '../sales/sale.entity';
 import { Category } from '../categories/category.entity';
+import { User } from '../users/user.entity';
 export declare class Product {
     id: string;
     name: string;
@@ -11,5 +12,6 @@ export declare class Product {
     isArchived: boolean;
     createdAt: Date;
     updatedAt: Date;
+    owner: User;
     sales: Sale[];
 }

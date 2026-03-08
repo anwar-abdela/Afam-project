@@ -7,6 +7,7 @@ import { CreateProductDto, UpdateProductDto } from './product.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
+import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { UserRole } from '../users/user.entity';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
@@ -33,20 +34,20 @@ export class ProductsController {
     }
 
     @Post()
-    @Roles(UserRole.ADMIN)
-    create(@Body() dto: CreateProductDto) {
-        return this.service.create(dto);
+    @Roles(UserRole.ADMIN, UserRole.MEMBER)
+    create(@Body() dto: CreateProductDto, @CurrentUser() user: any) {
+        return this.service.create(dto, user);
     }
 
     @Put(':id')
-    @Roles(UserRole.ADMIN)
-    update(@Param('id', ParseUUIDPipe) id: string, @Body() dto: UpdateProductDto) {
-        return this.service.update(id, dto);
+    @Roles(UserRole.ADMIN, UserRole.MEMBER)
+    update(@Param('id', ParseUUIDPipe) id: string, @Body() dto: UpdateProductDto, @CurrentUser() user: any) {
+        return this.service.update(id, dto, user);
     }
 
     @Patch(':id/archive')
-    @Roles(UserRole.ADMIN)
-    archive(@Param('id', ParseUUIDPipe) id: string) {
-        return this.service.archive(id);
+    @Roles(UserRole.ADMIN, UserRole.MEMBER)
+    archive(@Param('id', ParseUUIDPipe) id: string, @CurrentUser() user: any) {
+        return this.service.archive(id, user);
     }
 }

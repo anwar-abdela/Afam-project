@@ -19,6 +19,7 @@ const product_dto_1 = require("./product.dto");
 const jwt_auth_guard_1 = require("../common/guards/jwt-auth.guard");
 const roles_guard_1 = require("../common/guards/roles.guard");
 const roles_decorator_1 = require("../common/decorators/roles.decorator");
+const current_user_decorator_1 = require("../common/decorators/current-user.decorator");
 const user_entity_1 = require("../users/user.entity");
 const swagger_1 = require("@nestjs/swagger");
 let ProductsController = class ProductsController {
@@ -34,14 +35,14 @@ let ProductsController = class ProductsController {
     findOne(id) {
         return this.service.findOne(id);
     }
-    create(dto) {
-        return this.service.create(dto);
+    create(dto, user) {
+        return this.service.create(dto, user);
     }
-    update(id, dto) {
-        return this.service.update(id, dto);
+    update(id, dto, user) {
+        return this.service.update(id, dto, user);
     }
-    archive(id) {
-        return this.service.archive(id);
+    archive(id, user) {
+        return this.service.archive(id, user);
     }
 };
 exports.ProductsController = ProductsController;
@@ -68,27 +69,30 @@ __decorate([
 ], ProductsController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Post)(),
-    (0, roles_decorator_1.Roles)(user_entity_1.UserRole.ADMIN),
+    (0, roles_decorator_1.Roles)(user_entity_1.UserRole.ADMIN, user_entity_1.UserRole.MEMBER),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [product_dto_1.CreateProductDto]),
+    __metadata("design:paramtypes", [product_dto_1.CreateProductDto, Object]),
     __metadata("design:returntype", void 0)
 ], ProductsController.prototype, "create", null);
 __decorate([
     (0, common_1.Put)(':id'),
-    (0, roles_decorator_1.Roles)(user_entity_1.UserRole.ADMIN),
+    (0, roles_decorator_1.Roles)(user_entity_1.UserRole.ADMIN, user_entity_1.UserRole.MEMBER),
     __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
     __param(1, (0, common_1.Body)()),
+    __param(2, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, product_dto_1.UpdateProductDto]),
+    __metadata("design:paramtypes", [String, product_dto_1.UpdateProductDto, Object]),
     __metadata("design:returntype", void 0)
 ], ProductsController.prototype, "update", null);
 __decorate([
     (0, common_1.Patch)(':id/archive'),
-    (0, roles_decorator_1.Roles)(user_entity_1.UserRole.ADMIN),
+    (0, roles_decorator_1.Roles)(user_entity_1.UserRole.ADMIN, user_entity_1.UserRole.MEMBER),
     __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
+    __param(1, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", void 0)
 ], ProductsController.prototype, "archive", null);
 exports.ProductsController = ProductsController = __decorate([

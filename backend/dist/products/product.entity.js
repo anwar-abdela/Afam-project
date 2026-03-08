@@ -13,6 +13,7 @@ exports.Product = void 0;
 const typeorm_1 = require("typeorm");
 const sale_entity_1 = require("../sales/sale.entity");
 const category_entity_1 = require("../categories/category.entity");
+const user_entity_1 = require("../users/user.entity");
 let Product = class Product {
 };
 exports.Product = Product;
@@ -57,6 +58,11 @@ __decorate([
     (0, typeorm_1.Column)({ name: 'updated_at', type: 'timestamptz', default: () => 'NOW()' }),
     __metadata("design:type", Date)
 ], Product.prototype, "updatedAt", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => user_entity_1.User, { nullable: true, onDelete: 'SET NULL' }),
+    (0, typeorm_1.JoinColumn)({ name: 'owner_id' }),
+    __metadata("design:type", user_entity_1.User)
+], Product.prototype, "owner", void 0);
 __decorate([
     (0, typeorm_1.OneToMany)(() => sale_entity_1.Sale, (sale) => sale.product),
     __metadata("design:type", Array)

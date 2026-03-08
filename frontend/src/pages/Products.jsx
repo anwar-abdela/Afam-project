@@ -5,7 +5,9 @@ import { useAuth } from '../context/AuthContext';
 
 export default function Products() {
     const { user } = useAuth();
-    const isAdmin = user?.role === 'Admin';
+    const isAdmin = user?.role === 'admin' || user?.role === 'Admin';
+    const isMember = user?.role === 'member' || user?.role === 'Member';
+    const canAdd = isAdmin || isMember;
 
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -113,17 +115,19 @@ export default function Products() {
                     </p>
                 </div>
                 <div className="flex items-center gap-4 w-full sm:w-auto">
-                    {isAdmin && (
+                    {canAdd && (
                         <>
-                            <a
-                                href="/categories"
-                                className="hidden md:flex items-center text-sm text-indigo-600 hover:text-indigo-800 font-semibold transition-colors gap-1"
-                            >
-                                Manage Categories <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
-                            </a>
+                            {isAdmin && (
+                                <a
+                                    href="/categories"
+                                    className="hidden md:flex items-center text-sm text-primary-500 hover:text-blue-700 font-semibold transition-colors gap-1"
+                                >
+                                    Manage Categories <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                                </a>
+                            )}
                             <button
                                 onClick={() => handleOpenModal()}
-                                className="flex-1 sm:flex-none bg-indigo-600 text-white px-6 py-2.5 rounded-xl text-sm font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 active:scale-95"
+                                className="flex-1 sm:flex-none bg-primary-500 text-white px-6 py-2.5 rounded-xl text-sm font-bold hover:bg-primary-600 transition-all shadow-lg shadow-blue-100 active:scale-95"
                             >
                                 + Add Product
                             </button>
@@ -143,16 +147,14 @@ export default function Products() {
                                 <th className="px-8 py-4 text-left text-[11px] font-bold text-gray-400 uppercase tracking-widest">Category</th>
                                 <th className="px-8 py-4 text-left text-[11px] font-bold text-gray-400 uppercase tracking-widest">In Stock</th>
                                 <th className="px-8 py-4 text-left text-[11px] font-bold text-gray-400 uppercase tracking-widest">Pricing (Buy/Sell)</th>
-                                {isAdmin && (
-                                    <th className="px-8 py-4 text-right text-[11px] font-bold text-gray-400 uppercase tracking-widest">Actions</th>
-                                )}
+                                <th className="px-8 py-4 text-right text-[11px] font-bold text-gray-400 uppercase tracking-widest">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-50">
                             {loading ? (
                                 <tr><td colSpan={isAdmin ? 6 : 5} className="px-8 py-20 text-center">
                                     <div className="flex flex-col items-center gap-3">
-                                        <div className="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+                                        <div className="w-8 h-8 border-4 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
                                         <p className="text-sm text-gray-400 font-medium font-sans">Syncing inventory...</p>
                                     </div>
                                 </td></tr>
@@ -174,7 +176,7 @@ export default function Products() {
                                         </td>
                                         <td className="px-8 py-5 whitespace-nowrap">
                                             {p.category ? (
-                                                <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-[11px] font-bold bg-indigo-50 text-indigo-600">
+                                                <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-[11px] font-bold bg-blue-50 text-primary-500">
                                                     {p.category.name}
                                                 </span>
                                             ) : (
@@ -192,22 +194,26 @@ export default function Products() {
                                                 <span className="text-sm font-black text-gray-900">${Number(p.sellingPrice).toFixed(2)}</span>
                                             </div>
                                         </td>
-                                        {isAdmin && (
-                                            <td className="px-8 py-5 whitespace-nowrap text-right text-xs font-bold space-x-4">
-                                                <button
-                                                    onClick={() => handleOpenModal(p)}
-                                                    className="text-gray-400 hover:text-indigo-600 transition"
-                                                >
-                                                    Edit
-                                                </button>
-                                                <button
-                                                    onClick={() => handleArchive(p.id, p.name)}
-                                                    className="text-rose-400 hover:text-rose-600 transition"
-                                                >
-                                                    Archive
-                                                </button>
-                                            </td>
-                                        )}
+                                        <td className="px-8 py-5 whitespace-nowrap text-right text-xs font-bold space-x-4">
+                                            {(isAdmin || (isMember && p.owner?.id === user?.id)) ? (
+                                                <>
+                                                    <button
+                                                        onClick={() => handleOpenModal(p)}
+                                                        className="text-gray-400 hover:text-primary-500 transition"
+                                                    >
+                                                        Edit
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleArchive(p.id, p.name)}
+                                                        className="text-rose-400 hover:text-rose-600 transition"
+                                                    >
+                                                        Archive
+                                                    </button>
+                                                </>
+                                            ) : (
+                                                <span className="text-gray-300 font-normal italic">View Only</span>
+                                            )}
+                                        </td>
                                     </tr>
                                 ))
                             )}
@@ -221,9 +227,9 @@ export default function Products() {
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
                     <div className="absolute inset-0 bg-gray-900/40 backdrop-blur-md" onClick={() => { setIsModalOpen(false); resetForm(); }} />
                     <div className="relative bg-white rounded-[2rem] shadow-2xl w-full max-w-xl overflow-hidden z-10 animate-in fade-in slide-in-from-bottom-4 duration-300">
-                        <div className="bg-gradient-to-br from-indigo-600 to-violet-700 px-8 py-8 text-white">
+                        <div className="bg-gradient-to-br from-primary-500 to-blue-700 px-8 py-8 text-white">
                             <h3 className="text-2xl font-bold tracking-tight">{editingProduct ? 'Edit Product' : 'Add New Product'}</h3>
-                            <p className="text-indigo-100 text-sm mt-1 opacity-90">
+                            <p className="text-blue-100 text-sm mt-1 opacity-90">
                                 {editingProduct ? `Updating inventory for ${editingProduct.name}` : 'Create a new item in your digital catalog'}
                             </p>
                         </div>
@@ -256,7 +262,7 @@ export default function Products() {
                                 <select
                                     value={formData.categoryId}
                                     onChange={e => setFormData({ ...formData, categoryId: e.target.value })}
-                                    className="w-full bg-gray-50 border border-transparent rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all font-medium appearance-none cursor-pointer"
+                                    className="w-full bg-gray-50 border border-transparent rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-all font-medium appearance-none cursor-pointer"
                                 >
                                     <option value="">— Uncategorized —</option>
                                     {categories.map(c => (
@@ -264,7 +270,7 @@ export default function Products() {
                                     ))}
                                 </select>
                                 {categories.length === 0 && (
-                                    <p className="text-[10px] text-amber-600 mt-2 font-bold uppercase tracking-wider">No categories found. <a href="/categories" className="underline underline-offset-2">Go create one first</a></p>
+                                    <p className="text-[10px] text-accent mt-2 font-bold uppercase tracking-wider">No categories found. <a href="/categories" className="underline underline-offset-2">Go create one first</a></p>
                                 )}
                             </div>
 
@@ -298,7 +304,7 @@ export default function Products() {
                                             type="number" step="0.01" min="0" required
                                             value={formData.sellingPrice}
                                             onChange={e => setFormData({ ...formData, sellingPrice: Number(e.target.value) })}
-                                            className="w-full bg-gray-50 border border-transparent rounded-2xl pl-8 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all font-bold text-emerald-600"
+                                            className="w-full bg-gray-50 border border-transparent rounded-2xl pl-8 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-all font-bold text-emerald-600"
                                         />
                                     </div>
                                 </div>
@@ -307,7 +313,7 @@ export default function Products() {
                             <div className="flex gap-4 pt-4">
                                 <button
                                     type="submit"
-                                    className="flex-[2] bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl py-4 text-sm transition-all shadow-xl shadow-indigo-100 active:scale-[0.98]"
+                                    className="flex-[2] bg-primary-500 hover:bg-primary-600 text-white font-bold rounded-2xl py-4 text-sm transition-all shadow-xl shadow-blue-100 active:scale-[0.98]"
                                 >
                                     {editingProduct ? 'Save Changes' : 'Create Product'}
                                 </button>

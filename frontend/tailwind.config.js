@@ -8,11 +8,15 @@ export default {
         extend: {
             colors: {
                 primary: {
-                    50: '#eff6ff',
-                    100: '#dbeafe',
-                    500: '#3b82f6',
-                    600: '#2563eb',
-                    700: '#1d4ed8',
+                    50: '#f0f4ff',
+                    100: '#e0e7ff',
+                    500: '#2563eb', // Trust Blue
+                    600: '#1d4ed8',
+                    700: '#1e40af',
+                },
+                accent: {
+                    DEFAULT: '#f97316', // Action Orange
+                    hover: '#ea580c',
                 }
             }
         },
