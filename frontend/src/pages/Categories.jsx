@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 
 export default function Categories() {
     const { user } = useAuth();
-    const isAdmin = user?.role === 'Admin';
+    const isAdmin = user?.role?.toLowerCase() === 'admin';
 
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);

@@ -1,7 +1,7 @@
 {
   "name": "shop-backend",
   "version": "1.0.0",
-  "description": "Shop Management System Backend",
+  "description": "A Fam Backend",
   "scripts": {
     "build": "nest build",
     "start": "node dist/main",

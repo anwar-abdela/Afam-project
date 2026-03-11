@@ -22,8 +22,8 @@ async function bootstrap() {
     });
 
     const config = new DocumentBuilder()
-        .setTitle('Shop Management API')
-        .setDescription('API for single retail shop management')
+        .setTitle('A Fam API')
+        .setDescription('API for A Fam shop management')
         .setVersion('1.0')
         .addBearerAuth()
         .build();

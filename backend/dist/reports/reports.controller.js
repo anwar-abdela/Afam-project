@@ -36,6 +36,12 @@ let ReportsController = class ReportsController {
     potentialProfit() {
         return this.service.getPotentialProfit();
     }
+    getSummary() {
+        return this.service.getSummary();
+    }
+    getSalesTrend() {
+        return this.service.getSalesTrend();
+    }
 };
 exports.ReportsController = ReportsController;
 __decorate([
@@ -72,6 +78,18 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], ReportsController.prototype, "potentialProfit", null);
+__decorate([
+    (0, common_1.Get)('summary'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], ReportsController.prototype, "getSummary", null);
+__decorate([
+    (0, common_1.Get)('sales-trend'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], ReportsController.prototype, "getSalesTrend", null);
 exports.ReportsController = ReportsController = __decorate([
     (0, swagger_1.ApiTags)('Reports'),
     (0, swagger_1.ApiBearerAuth)(),

@@ -34,4 +34,14 @@ export class ReportsController {
     potentialProfit() {
         return this.service.getPotentialProfit();
     }
+
+    @Get('summary')
+    getSummary() {
+        return this.service.getSummary();
+    }
+
+    @Get('sales-trend')
+    getSalesTrend() {
+        return this.service.getSalesTrend();
+    }
 }

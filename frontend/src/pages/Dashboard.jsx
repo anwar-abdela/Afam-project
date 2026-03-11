@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import api from '../api/axios';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 function SummaryCard({ title, value, color, icon, detail }) {
     const colors = {
@@ -42,6 +43,7 @@ function SummaryCard({ title, value, color, icon, detail }) {
 }
 
 export default function Dashboard() {
+    const { user } = useAuth();
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -67,7 +69,7 @@ export default function Dashboard() {
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
                     <h1 className="text-4xl font-black text-gray-900 tracking-tighter leading-none">
-                        Welcome back, <span className="text-primary-500 italic uppercase">System Admin</span>
+                        Welcome back, <span className="text-primary-500 italic uppercase">{user?.name || 'User'}</span>
                     </h1>
                     <p className="text-gray-400 mt-2 font-medium">Real-time business performance & inventory insights.</p>
                 </div>

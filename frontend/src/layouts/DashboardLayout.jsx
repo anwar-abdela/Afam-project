@@ -2,11 +2,12 @@ import React from 'react';
 import { Outlet, Navigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-function SidebarItem({ to, label, current }) {
+function SidebarItem({ to, label, current, onClick }) {
     const isActive = (current === to) || (to !== '/' && current.startsWith(to));
     return (
         <Link
             to={to}
+            onClick={onClick}
             className={`${isActive
                 ? 'bg-primary-500 text-white shadow-lg shadow-blue-100 font-bold'
                 : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900 font-semibold'
@@ -22,40 +23,58 @@ function SidebarItem({ to, label, current }) {
 export default function DashboardLayout() {
     const { user, logout } = useAuth();
     const location = useLocation();
+    const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
 
     if (!user) {
         return <Navigate to="/login" replace />;
     }
 
     const currentPathLabel = () => {
-        if (location.pathname === '/') return 'Dashboard Overview';
-        const path = location.pathname.substring(1);
-        return path.charAt(0)?.toUpperCase() + path.slice(1);
+        const path = location.pathname;
+        if (path === '/dashboard') return 'Dashboard Overview';
+        if (path === '/products') return 'Inventory Master';
+        if (path === '/categories') return 'Categorization Logic';
+        if (path === '/sales') return 'Transaction Terminal';
+        if (path === '/savings') return 'Cooperative Ledger';
+        if (path === '/reports') return 'Analytics Engine';
+        const name = path.split('/').pop();
+        return name?.charAt(0)?.toUpperCase() + name?.slice(1);
     };
 
     return (
         <div className="flex h-screen bg-[#F8FAFC]">
+            {/* Mobile Sidebar Overlay */}
+            {isSidebarOpen && (
+                <div
+                    className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-40 lg:hidden"
+                    onClick={() => setIsSidebarOpen(false)}
+                />
+            )}
+
             {/* Sidebar */}
-            <div className="w-72 bg-white border-r border-gray-100 shadow-[20px_0_40px_-20px_rgba(0,0,0,0.02)] flex flex-col hidden lg:flex z-20">
+            <div className={`
+                fixed inset-y-0 left-0 w-72 bg-white border-r border-gray-100 shadow-2xl z-50 transform transition-transform duration-300 lg:relative lg:translate-x-0 lg:shadow-none
+                ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+            `}>
                 <div className="h-24 flex items-center px-8">
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-blue-700 rounded-2xl shadow-lg shadow-blue-200 flex items-center justify-center text-white font-black text-xl italic tracking-tighter">
                             A
                         </div>
                         <div>
-                            <h1 className="text-xl font-black text-gray-900 tracking-tight leading-none uppercase italic">Artic</h1>
-                            <p className="text-[10px] font-bold text-gray-400 mt-1 uppercase tracking-widest opacity-80">Sync Manager</p>
+                            <h1 className="text-xl font-black text-gray-900 tracking-tight leading-none uppercase italic">Fam</h1>
+                            <p className="text-[10px] font-bold text-gray-400 mt-1 uppercase tracking-widest opacity-80">Inventory & Control</p>
                         </div>
                     </div>
                 </div>
 
                 <div className="flex-1 overflow-y-auto px-6 py-6 scrollbar-hide flex flex-col gap-1">
-                    <SidebarItem to="/" label="󱂬 Dashboard" current={location.pathname} />
-                    <SidebarItem to="/products" label="󱣧 Products" current={location.pathname} />
-                    <SidebarItem to="/categories" label="󱡠 Categories" current={location.pathname} />
-                    <SidebarItem to="/sales" label="󱥪 Sales" current={location.pathname} />
-                    <SidebarItem to="/savings" label="󱙩 Savings" current={location.pathname} />
-                    <SidebarItem to="/reports" label="󱓞 Reports" current={location.pathname} />
+                    <SidebarItem to="/dashboard" label="󱂬 Dashboard" current={location.pathname} onClick={() => setIsSidebarOpen(false)} />
+                    <SidebarItem to="/products" label="󱣧 Products" current={location.pathname} onClick={() => setIsSidebarOpen(false)} />
+                    <SidebarItem to="/categories" label="󱡠 Categories" current={location.pathname} onClick={() => setIsSidebarOpen(false)} />
+                    <SidebarItem to="/sales" label="󱥪 Sales" current={location.pathname} onClick={() => setIsSidebarOpen(false)} />
+                    <SidebarItem to="/savings" label="󱙩 Savings" current={location.pathname} onClick={() => setIsSidebarOpen(false)} />
+                    <SidebarItem to="/reports" label="󱓞 Reports" current={location.pathname} onClick={() => setIsSidebarOpen(false)} />
                 </div>
 
                 <div className="mx-6 mb-8 p-6 bg-gray-50/50 rounded-3xl border border-gray-100/50">
@@ -82,9 +101,12 @@ export default function DashboardLayout() {
             <div className="flex-1 flex flex-col overflow-hidden relative">
                 <header className="h-20 bg-white/70 backdrop-blur-xl border-b border-gray-100 flex items-center justify-between px-8 lg:px-12 sticky top-0 z-10 transition-all duration-300">
                     <div className="flex items-center gap-4">
-                        <div className="lg:hidden w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400">
+                        <button
+                            onClick={() => setIsSidebarOpen(true)}
+                            className="lg:hidden w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 hover:bg-blue-50 hover:text-primary-500 transition-all"
+                        >
                             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
-                        </div>
+                        </button>
                         <h2 className="text-lg font-black text-gray-900 tracking-tight uppercase italic opacity-70">
                             {currentPathLabel()}
                         </h2>

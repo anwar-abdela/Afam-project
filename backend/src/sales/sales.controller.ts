@@ -6,8 +6,9 @@ import { CreateSaleDto } from './sale.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
-import { UserRole } from '../users/user.entity';
+import { UserRole, User } from '../users/user.entity';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { CurrentUser } from '../common/decorators/current-user.decorator';
 
 @ApiTags('Sales')
 @ApiBearerAuth()
@@ -18,8 +19,8 @@ export class SalesController {
 
     @Post()
     @Roles(UserRole.ADMIN, UserRole.MEMBER)
-    create(@Body() dto: CreateSaleDto) {
-        return this.service.create(dto);
+    create(@Body() dto: CreateSaleDto, @CurrentUser() user: any) {
+        return this.service.create(dto, user.id);
     }
 
     @Get()
@@ -30,5 +31,10 @@ export class SalesController {
     @Get('summary')
     getSummary() {
         return this.service.getSummary();
+    }
+
+    @Get('history-summary')
+    getHistorySummary() {
+        return this.service.getHistorySummary();
     }
 }

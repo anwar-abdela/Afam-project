@@ -13,10 +13,14 @@ export default {
                     500: '#2563eb', // Trust Blue
                     600: '#1d4ed8',
                     700: '#1e40af',
+                    900: '#1e3a8a', // Dark Blue for header/footer
                 },
                 accent: {
                     DEFAULT: '#f97316', // Action Orange
                     hover: '#ea580c',
+                },
+                background: {
+                    light: '#f8fafc', // Very light gray
                 }
             }
         },

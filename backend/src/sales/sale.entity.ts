@@ -3,6 +3,7 @@ import {
     JoinColumn, CreateDateColumn,
 } from 'typeorm';
 import { Product } from '../products/product.entity';
+import { User } from '../users/user.entity';
 
 @Entity('sales')
 export class Sale {
@@ -15,6 +16,13 @@ export class Sale {
 
     @Column({ name: 'product_id' })
     productId: string;
+
+    @ManyToOne(() => User, { onDelete: 'SET NULL' })
+    @JoinColumn({ name: 'user_id' })
+    user: User;
+
+    @Column({ name: 'user_id', nullable: true })
+    userId: string;
 
     @Column({ type: 'int' })
     quantity: number;

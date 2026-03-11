@@ -71,18 +71,35 @@ export class SavingsService {
         if (year) qb.andWhere('EXTRACT(YEAR  FROM c.date) = :year', { year });
         if (month) qb.andWhere('EXTRACT(MONTH FROM c.date) = :month', { month });
 
-        const contributions = await qb.getMany();
+        const [contributions, allMembers] = await Promise.all([
+            qb.getMany(),
+            this.membersRepo.find({ where: { isActive: true } })
+        ]);
 
         // Group by member
         const byMember: Record<string, any> = {};
+
+        // Initialize with all active members
+        for (const m of allMembers) {
+            byMember[m.id] = {
+                member: m,
+                total: 0,
+                missed: 0,
+                entries: [],
+                totalEntries: 0
+            };
+        }
+
         for (const c of contributions) {
             const mid = c.memberId;
+            // Ensure member exists in map (might be inactive now but had contributions)
             if (!byMember[mid]) {
-                byMember[mid] = { member: c.member, total: 0, missed: 0, entries: [] };
+                byMember[mid] = { member: c.member, total: 0, missed: 0, entries: [], totalEntries: 0 };
             }
             byMember[mid].total += Number(c.amount);
             if (c.isMissed) byMember[mid].missed += 1;
             byMember[mid].entries.push(c);
+            byMember[mid].totalEntries += 1;
         }
 
         const groupTotal = Object.values(byMember).reduce(

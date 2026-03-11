@@ -33,4 +33,14 @@ export declare class ReportsController {
     potentialProfit(): Promise<{
         potentialProfit: number;
     }>;
+    getSummary(): Promise<{
+        totalRevenue: number;
+        totalProfit: number;
+        totalProducts: number;
+        lowStockCount: number;
+    }>;
+    getSalesTrend(): Promise<{
+        date: string;
+        revenue: number;
+    }[]>;
 }

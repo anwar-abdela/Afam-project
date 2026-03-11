@@ -68,4 +68,38 @@ export class ReportsService {
         }, 0);
         return { potentialProfit: potential };
     }
+
+    async getSummary() {
+        const [sales, products] = await Promise.all([
+            this.salesRepo.find(),
+            this.productsRepo.find({ where: { isArchived: false } }),
+        ]);
+
+        const totalRevenue = sales.reduce((sum, s) => sum + Number(s.totalPrice), 0);
+        const totalProfit = sales.reduce((sum, s) => sum + Number(s.profit), 0);
+        const lowStockCount = products.filter(p => p.quantity < 5).length;
+
+        return {
+            totalRevenue,
+            totalProfit,
+            totalProducts: products.length,
+            lowStockCount,
+        };
+    }
+
+    async getSalesTrend() {
+        const sales = await this.salesRepo
+            .createQueryBuilder('s')
+            .select('DATE(s.saleDate)', 'date')
+            .addSelect('SUM(s.total_price)', 'revenue')
+            .groupBy('DATE(s.saleDate)')
+            .orderBy('DATE(s.saleDate)', 'ASC')
+            .limit(30)
+            .getRawMany();
+
+        return sales.map(s => ({
+            date: new Date(s.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+            revenue: Number(s.revenue),
+        }));
+    }
 }

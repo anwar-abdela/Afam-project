@@ -5,8 +5,8 @@ import { useAuth } from '../context/AuthContext';
 
 export default function Products() {
     const { user } = useAuth();
-    const isAdmin = user?.role === 'admin' || user?.role === 'Admin';
-    const isMember = user?.role === 'member' || user?.role === 'Member';
+    const isAdmin = user?.role?.toLowerCase() === 'admin';
+    const isMember = user?.role?.toLowerCase() === 'member';
     const canAdd = isAdmin || isMember;
 
     const [products, setProducts] = useState([]);

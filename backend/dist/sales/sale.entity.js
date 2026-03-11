@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Sale = void 0;
 const typeorm_1 = require("typeorm");
 const product_entity_1 = require("../products/product.entity");
+const user_entity_1 = require("../users/user.entity");
 let Sale = class Sale {
 };
 exports.Sale = Sale;
@@ -28,6 +29,15 @@ __decorate([
     (0, typeorm_1.Column)({ name: 'product_id' }),
     __metadata("design:type", String)
 ], Sale.prototype, "productId", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => user_entity_1.User, { onDelete: 'SET NULL' }),
+    (0, typeorm_1.JoinColumn)({ name: 'user_id' }),
+    __metadata("design:type", user_entity_1.User)
+], Sale.prototype, "user", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'user_id', nullable: true }),
+    __metadata("design:type", String)
+], Sale.prototype, "userId", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'int' }),
     __metadata("design:type", Number)

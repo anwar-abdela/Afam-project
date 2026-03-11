@@ -16,7 +16,7 @@ export default function Login() {
         try {
             await login(email, password);
             toast.success('Access Granted');
-            navigate('/');
+            navigate('/dashboard');
         } catch (error) {
             toast.error(error.response?.data?.message || 'Authentication failed');
         } finally {
@@ -38,7 +38,7 @@ export default function Login() {
                             <span className="text-white text-4xl font-black italic tracking-tighter">A</span>
                         </div>
                         <h2 className="text-3xl font-black text-white tracking-tighter uppercase italic leading-none">
-                            Artic Sync
+                            Fam
                         </h2>
                         <p className="text-slate-400 text-xs font-bold uppercase tracking-[0.2em] opacity-80">
                             Central Command Portal
@@ -53,7 +53,7 @@ export default function Login() {
                                     type="email"
                                     required
                                     className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white/10 transition-all placeholder:text-slate-600"
-                                    placeholder="operator@artic.sync"
+                                    placeholder="admin@afam.com"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
@@ -91,14 +91,14 @@ export default function Login() {
 
                     <div className="mt-6 p-4 bg-white/5 rounded-2xl border border-white/5 text-center">
                         <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest leading-relaxed">
-                            Secured by Artic Protocol v4.0.2<br />
+                            Secured by A Fam Protocol v1.0.0<br />
                             <span className="text-primary-500 opacity-60">Authorized personnel only</span>
                         </p>
                     </div>
                 </div>
 
                 <p className="text-center mt-10 text-[10px] font-bold text-slate-600 uppercase tracking-widest">
-                    &copy; 2026 Artic Global Systems
+                    &copy; 2026 A Fam
                 </p>
             </div>
         </div>

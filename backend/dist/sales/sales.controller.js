@@ -21,12 +21,13 @@ const roles_guard_1 = require("../common/guards/roles.guard");
 const roles_decorator_1 = require("../common/decorators/roles.decorator");
 const user_entity_1 = require("../users/user.entity");
 const swagger_1 = require("@nestjs/swagger");
+const current_user_decorator_1 = require("../common/decorators/current-user.decorator");
 let SalesController = class SalesController {
     constructor(service) {
         this.service = service;
     }
-    create(dto) {
-        return this.service.create(dto);
+    create(dto, user) {
+        return this.service.create(dto, user.id);
     }
     findAll(from, to) {
         return this.service.findAll(from, to);
@@ -34,14 +35,18 @@ let SalesController = class SalesController {
     getSummary() {
         return this.service.getSummary();
     }
+    getHistorySummary() {
+        return this.service.getHistorySummary();
+    }
 };
 exports.SalesController = SalesController;
 __decorate([
     (0, common_1.Post)(),
     (0, roles_decorator_1.Roles)(user_entity_1.UserRole.ADMIN, user_entity_1.UserRole.MEMBER),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [sale_dto_1.CreateSaleDto]),
+    __metadata("design:paramtypes", [sale_dto_1.CreateSaleDto, Object]),
     __metadata("design:returntype", void 0)
 ], SalesController.prototype, "create", null);
 __decorate([
@@ -58,6 +63,12 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], SalesController.prototype, "getSummary", null);
+__decorate([
+    (0, common_1.Get)('history-summary'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], SalesController.prototype, "getHistorySummary", null);
 exports.SalesController = SalesController = __decorate([
     (0, swagger_1.ApiTags)('Sales'),
     (0, swagger_1.ApiBearerAuth)(),

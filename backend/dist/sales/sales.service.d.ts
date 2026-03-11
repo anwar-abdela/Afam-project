@@ -7,8 +7,19 @@ export declare class SalesService {
     private productsRepo;
     private dataSource;
     constructor(salesRepo: Repository<Sale>, productsRepo: Repository<Product>, dataSource: DataSource);
-    create(dto: CreateSaleDto): Promise<Sale>;
+    create(dto: CreateSaleDto, userId: string): Promise<Sale>;
     findAll(from?: string, to?: string): Promise<Sale[]>;
+    getHistorySummary(): Promise<{
+        today: {
+            revenue: number;
+            profit: number;
+            count: number;
+        };
+        overall: {
+            revenue: number;
+            profit: number;
+        };
+    }>;
     getSummary(): Promise<{
         totalRevenue: number;
         totalProfit: number;

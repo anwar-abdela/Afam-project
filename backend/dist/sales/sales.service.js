@@ -24,7 +24,7 @@ let SalesService = class SalesService {
         this.productsRepo = productsRepo;
         this.dataSource = dataSource;
     }
-    async create(dto) {
+    async create(dto, userId) {
         return this.dataSource.transaction(async (manager) => {
             const product = await manager.findOne(product_entity_1.Product, {
                 where: { id: dto.productId, isArchived: false },
@@ -42,6 +42,7 @@ let SalesService = class SalesService {
             await manager.save(product_entity_1.Product, product);
             const sale = manager.create(sale_entity_1.Sale, {
                 productId: dto.productId,
+                userId,
                 quantity: dto.quantity,
                 unitPrice,
                 totalPrice,
@@ -54,12 +55,40 @@ let SalesService = class SalesService {
         const qb = this.salesRepo
             .createQueryBuilder('s')
             .leftJoinAndSelect('s.product', 'p')
+            .leftJoinAndSelect('s.user', 'u')
             .orderBy('s.saleDate', 'DESC');
         if (from)
-            qb.andWhere('s.saleDate >= :from', { from });
+            qb.andWhere('s.saleDate >= :from', { from: new Date(from) });
         if (to)
-            qb.andWhere('s.saleDate <= :to', { to });
+            qb.andWhere('s.saleDate <= :to', { to: new Date(to) });
         return qb.getMany();
+    }
+    async getHistorySummary() {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const dailyStats = await this.salesRepo
+            .createQueryBuilder('s')
+            .select('SUM(s.total_price)', 'revenue')
+            .addSelect('SUM(s.profit)', 'profit')
+            .addSelect('COUNT(s.id)', 'count')
+            .where('s.saleDate >= :today', { today })
+            .getRawOne();
+        const overallStats = await this.salesRepo
+            .createQueryBuilder('s')
+            .select('SUM(s.total_price)', 'revenue')
+            .addSelect('SUM(s.profit)', 'profit')
+            .getRawOne();
+        return {
+            today: {
+                revenue: Number(dailyStats.revenue) || 0,
+                profit: Number(dailyStats.profit) || 0,
+                count: Number(dailyStats.count) || 0,
+            },
+            overall: {
+                revenue: Number(overallStats.revenue) || 0,
+                profit: Number(overallStats.profit) || 0,
+            }
+        };
     }
     async getSummary() {
         const result = await this.salesRepo
