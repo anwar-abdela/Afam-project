@@ -25,22 +25,22 @@ export default function Login() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-[#0F172A] relative overflow-hidden font-sans">
+        <div className="min-h-screen flex items-center justify-center bg-white relative overflow-hidden font-sans">
             {/* Animated Background Elements */}
-            <div className="absolute top-0 left-0 w-full h-full opacity-20 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #334155 1px, transparent 0)', backgroundSize: '32px 32px' }}></div>
-            <div className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-primary-500/20 blur-[120px] rounded-full animate-pulse"></div>
+            <div className="absolute top-0 left-0 w-full h-full opacity-50 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #cbd5e1 1px, transparent 0)', backgroundSize: '32px 32px' }}></div>
+            <div className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-primary-500/10 blur-[120px] rounded-full animate-pulse"></div>
             <div className="absolute -bottom-[20%] -right-[10%] w-[60%] h-[60%] bg-blue-600/10 blur-[120px] rounded-full"></div>
 
             <div className="max-w-md w-full mx-4 relative z-10">
-                <div className="bg-white/5 backdrop-blur-2xl p-10 rounded-[2.5rem] border border-white/10 shadow-2xl space-y-10 group">
+                <div className="bg-white/80 backdrop-blur-2xl p-10 rounded-[2.5rem] border border-slate-200 shadow-xl space-y-10 group">
                     <div className="text-center space-y-2">
-                        <div className="w-20 h-20 bg-gradient-to-br from-primary-500 to-blue-700 rounded-3xl mx-auto shadow-2xl shadow-blue-500/20 flex items-center justify-center mb-6 transform group-hover:rotate-6 transition-transform duration-500">
+                        <div className="w-20 h-20 bg-gradient-to-br from-primary-500 to-blue-700 rounded-3xl mx-auto shadow-xl shadow-blue-500/20 flex items-center justify-center mb-6 transform group-hover:rotate-6 transition-transform duration-500">
                             <span className="text-white text-4xl font-black italic tracking-tighter">A</span>
                         </div>
-                        <h2 className="text-3xl font-black text-white tracking-tighter uppercase italic leading-none">
+                        <h2 className="text-3xl font-black text-slate-900 tracking-tighter uppercase italic leading-none">
                             Fam
                         </h2>
-                        <p className="text-slate-400 text-xs font-bold uppercase tracking-[0.2em] opacity-80">
+                        <p className="text-slate-500 text-xs font-bold uppercase tracking-[0.2em] opacity-80">
                             Central Command Portal
                         </p>
                     </div>
@@ -48,22 +48,22 @@ export default function Login() {
                     <form className="space-y-6" onSubmit={handleSubmit}>
                         <div className="space-y-4">
                             <div className="space-y-1">
-                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest px-1">Identity</label>
+                                <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest px-1">Identity</label>
                                 <input
                                     type="email"
                                     required
-                                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white/10 transition-all placeholder:text-slate-600"
+                                    className="w-full bg-white border border-slate-300 rounded-2xl px-5 py-4 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all placeholder:text-slate-400"
                                     placeholder="admin@afam.com"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
                             </div>
                             <div className="space-y-1">
-                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest px-1">Access Key</label>
+                                <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest px-1">Access Key</label>
                                 <input
                                     type="password"
                                     required
-                                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white/10 transition-all placeholder:text-slate-600"
+                                    className="w-full bg-white border border-slate-300 rounded-2xl px-5 py-4 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all placeholder:text-slate-400"
                                     placeholder="••••••••"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
@@ -89,15 +89,15 @@ export default function Login() {
                         </div>
                     </form>
 
-                    <div className="mt-6 p-4 bg-white/5 rounded-2xl border border-white/5 text-center">
-                        <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest leading-relaxed">
+                    <div className="mt-6 p-4 bg-slate-50 rounded-2xl border border-slate-100 text-center">
+                        <p className="text-[10px] text-slate-600 font-bold uppercase tracking-widest leading-relaxed">
                             Secured by A Fam Protocol v1.0.0<br />
-                            <span className="text-primary-500 opacity-60">Authorized personnel only</span>
+                            <span className="text-primary-600 opacity-80">Authorized personnel only</span>
                         </p>
                     </div>
                 </div>
 
-                <p className="text-center mt-10 text-[10px] font-bold text-slate-600 uppercase tracking-widest">
+                <p className="text-center mt-10 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                     &copy; 2026 A Fam
                 </p>
             </div>
