@@ -17,6 +17,7 @@ import { CategoriesModule } from './categories/categories.module';
             imports: [ConfigModule],
             useFactory: (config: ConfigService) => ({
                 type: 'postgres',
+                url: config.get('DATABASE_URL'),
                 host: config.get('DB_HOST'),
                 port: +config.get<number>('DB_PORT'),
                 username: config.get('DB_USERNAME'),
