@@ -4,6 +4,14 @@ import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
+    // 6. ERROR HANDLING - Check for required environment variables
+    if (!process.env.DATABASE_URL) {
+        console.error('CRITICAL ERROR: DATABASE_URL environment variable is missing.');
+    }
+    if (!process.env.JWT_SECRET) {
+        console.error('CRITICAL ERROR: JWT_SECRET environment variable is missing.');
+    }
+
     const app = await NestFactory.create(AppModule);
 
     app.setGlobalPrefix('api');
@@ -16,8 +24,9 @@ async function bootstrap() {
         }),
     );
 
+    // 7. PRODUCTION SETTINGS - Enable CORS for frontend
     app.enableCors({
-        origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+        origin: process.env.FRONTEND_URL || '*',
         credentials: true,
     });
 
@@ -30,8 +39,8 @@ async function bootstrap() {
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('api/docs', app, document);
 
-    const port = process.env.PORT || 3000;
-    await app.listen(port, '0.0.0.0');
-    console.log(`Application running on port ${port}`);
+    // 1. PORT CONFIGURATION
+    await app.listen(process.env.PORT || 3000);
+    console.log(`Application running on port ${process.env.PORT || 3000}`);
 }
 bootstrap();
