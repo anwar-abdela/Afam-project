@@ -13,22 +13,14 @@ import { CategoriesModule } from './categories/categories.module';
 @Module({
     imports: [
         ConfigModule.forRoot({ isGlobal: true }),
-        TypeOrmModule.forRootAsync({
-            imports: [ConfigModule],
-            useFactory: (config: ConfigService) => ({
-                type: 'postgres',
-                url: config.get('DATABASE_URL'),
-                host: config.get('DB_HOST'),
-                port: +config.get<number>('DB_PORT'),
-                username: config.get('DB_USERNAME'),
-                password: config.get('DB_PASSWORD'),
-                database: config.get('DB_NAME'),
-                autoLoadEntities: true,
-                synchronize: false,
-                logging: config.get('NODE_ENV') === 'development',
-                ssl: config.get('NODE_ENV') === 'production' ? { rejectUnauthorized: false } : false,
-            }),
-            inject: [ConfigService],
+        TypeOrmModule.forRoot({
+            type: 'postgres',
+            url: process.env.DATABASE_URL,
+            ssl: {
+                rejectUnauthorized: false,
+            },
+            autoLoadEntities: true,
+            synchronize: true,
         }),
         AuthModule,
         UsersModule,
